@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -70,6 +71,47 @@ function FeatureCard({ icon, title, desc }) {
         </Typography>
       </CardContent>
     </Card>
+  );
+}
+
+function RotatingText({ variants, color }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsAnimating(true);
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev + 1) % variants.length);
+        setIsAnimating(false);
+      }, 300);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [variants.length]);
+
+  return (
+    <Box
+      sx={{
+        display: "inline-block",
+        position: "relative",
+        overflow: "hidden",
+        verticalAlign: "top",
+        minWidth: "fit-content",
+      }}
+    >
+      <Box
+        sx={{
+          display: "inline-block",
+          transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s",
+          transform: isAnimating ? "translateY(-100%)" : "translateY(0)",
+          opacity: isAnimating ? 0 : 1,
+          color: color,
+        }}
+      >
+        {variants[currentIndex]}
+      </Box>
+    </Box>
   );
 }
 
@@ -153,9 +195,12 @@ export default function LandingPage() {
     "built for Scale",
     "built for Content Writers",
     "built for Creators",
+    "built for Product Teams",
+    "built for Technical Writers",
+    "built for Content Ops",
+    "built for Growth Teams",
+    "built for Documentation",
   ];
-
-  const randomICP = icpVariants[Math.floor(Math.random() * icpVariants.length)];
 
   return (
     <Box sx={{ bgcolor: BRAND.slateBlue, minHeight: "100vh" }}>
@@ -201,7 +246,7 @@ export default function LandingPage() {
           }}
         >
           Content tracking{" "}
-          <span style={{ color: BRAND.springGreen }}>{randomICP}</span>
+          <RotatingText variants={icpVariants} color={BRAND.springGreen} />
         </Typography>
         <Typography
           variant="h5"
