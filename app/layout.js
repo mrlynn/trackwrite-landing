@@ -1,5 +1,3 @@
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
-
 export const metadata = {
   title: "TrackWrite — Content Tracking for Developer Relations Teams",
   description: "Track content commitments, measure delivery, and keep your DevRel team accountable. Purpose-built for Developer Relations.",
