@@ -76,16 +76,20 @@ function FeatureCard({ icon, title, desc }) {
 
 function RotatingText({ variants, color }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [isSpinning, setIsSpinning] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIsAnimating(true);
+      setIsSpinning(true);
+      // Fast spin phase
       setTimeout(() => {
         setCurrentIndex((prev) => (prev + 1) % variants.length);
-        setIsAnimating(false);
-      }, 300);
-    }, 3000);
+      }, 400);
+      // Settle phase
+      setTimeout(() => {
+        setIsSpinning(false);
+      }, 600);
+    }, 3500);
 
     return () => clearInterval(interval);
   }, [variants.length]);
@@ -96,20 +100,41 @@ function RotatingText({ variants, color }) {
         display: "inline-block",
         position: "relative",
         overflow: "hidden",
-        verticalAlign: "top",
-        minWidth: "fit-content",
+        verticalAlign: "baseline",
+        height: "1.2em",
+        minWidth: { xs: "280px", md: "350px" },
+        textAlign: "center",
       }}
     >
       <Box
         sx={{
-          display: "inline-block",
-          transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s",
-          transform: isAnimating ? "translateY(-100%)" : "translateY(0)",
-          opacity: isAnimating ? 0 : 1,
-          color: color,
+          display: "flex",
+          flexDirection: "column",
+          position: "relative",
+          width: "100%",
+          transition: isSpinning
+            ? "transform 0.4s cubic-bezier(0.15, 0.85, 0.35, 1), filter 0.4s"
+            : "transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.6s",
+          transform: `translateY(calc(-${currentIndex} * 1.2em))`,
+          filter: isSpinning ? "blur(2px)" : "blur(0px)",
         }}
       >
-        {variants[currentIndex]}
+        {variants.map((variant, idx) => (
+          <Box
+            key={idx}
+            sx={{
+              height: "1.2em",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: color,
+              whiteSpace: "nowrap",
+              fontWeight: 700,
+            }}
+          >
+            {variant}
+          </Box>
+        ))}
       </Box>
     </Box>
   );
@@ -190,16 +215,16 @@ function PricingCard({ name, price, period, features: planFeatures, cta, highlig
 
 export default function LandingPage() {
   const icpVariants = [
-    "built for DevRel",
-    "built for Marketing",
-    "built for Scale",
-    "built for Content Writers",
-    "built for Creators",
-    "built for Product Teams",
-    "built for Technical Writers",
-    "built for Content Ops",
-    "built for Growth Teams",
-    "built for Documentation",
+    "DevRel",
+    "Marketing",
+    "Scale",
+    "Content Writers",
+    "Creators",
+    "Product Teams",
+    "Technical Writers",
+    "Content Ops",
+    "Growth Teams",
+    "Documentation Teams",
   ];
 
   return (
@@ -245,7 +270,8 @@ export default function LandingPage() {
             letterSpacing: "-1px",
           }}
         >
-          Content tracking{" "}
+          Content tracking, built for
+          <br />
           <RotatingText variants={icpVariants} color={BRAND.springGreen} />
         </Typography>
         <Typography
