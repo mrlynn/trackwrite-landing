@@ -147,6 +147,16 @@ function PricingCard({ name, price, period, features: planFeatures, cta, highlig
 }
 
 export default function LandingPage() {
+  const icpVariants = [
+    "built for DevRel",
+    "built for Marketing",
+    "built for Scale",
+    "built for Content Writers",
+    "built for Creators",
+  ];
+
+  const randomICP = icpVariants[Math.floor(Math.random() * icpVariants.length)];
+
   return (
     <Box sx={{ bgcolor: BRAND.slateBlue, minHeight: "100vh" }}>
       {/* Nav */}
@@ -191,7 +201,7 @@ export default function LandingPage() {
           }}
         >
           Content tracking{" "}
-          <span style={{ color: BRAND.springGreen }}>built for DevRel</span>
+          <span style={{ color: BRAND.springGreen }}>{randomICP}</span>
         </Typography>
         <Typography
           variant="h5"
